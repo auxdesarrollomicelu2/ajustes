@@ -1,0 +1,333 @@
+/* Importar fuentes */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+/* Estilos base */
+body {
+    background: #F9FAFB;
+    font-family: 'Poppins', sans-serif;
+    padding: 2rem;
+    color: #1E293B;
+}
+
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+    background: #FFFFFF;
+    border-radius: 20px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+    padding: 2.5rem;
+}
+
+/* Header */
+.header {
+    margin-bottom: 2.5rem;
+    position: relative;
+    padding-bottom: 1.5rem;
+    text-align: center; /* Centrar títulos */
+}
+
+.header::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%; /* Reducir el ancho de la línea */
+    height: 3px;
+    background: linear-gradient(to right, #000000, #4A6CF7);
+}
+
+.title {
+    font-size: 1.75rem;
+    font-weight: 600;
+    color: #1E293B;
+    margin-bottom: 0.5rem;
+    text-align: center;
+}
+
+.subtitle {
+    color: #64748B;
+    font-size: 0.95rem;
+    text-align: center;
+}
+
+/* Grid con espaciado mejorado */
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.5rem;
+    padding: 1rem; 
+}
+
+/* Grupos de formulario con mejor espaciado */
+.form-group {
+    margin-bottom: 0.75rem; 
+    position: relative;
+    background: #FFFFFF; 
+    border-radius: 12px;
+    padding: 0.5rem;
+}
+
+/* Títulos de ajuste centrados */
+.adjustment-title {
+    text-align: center;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #1E293B;
+    margin: 2rem 0;
+    padding: 1rem 0;
+}
+
+/* Total centrado */
+.total-section {
+    text-align: center;
+    margin: 2rem 0;
+    padding: 1rem;
+    background: #F8FAFC;
+    border-radius: 12px;
+}
+
+.total-amount {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #000000;
+}
+
+/* Resto de los estilos se mantienen igual */
+.form-label {
+    display: block;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #1E293B;
+
+}
+
+.required {
+    color: #FF6B6B;
+    margin-left: 0.25rem;
+}
+
+.form-control {
+    width: 100%;
+    padding: 0.875rem 1rem;
+    font-size: 0.95rem;
+    border: 2px solid #E2E8F0;
+    border-radius: 12px;
+    background: #FFFFFF;
+    transition: all 0.3s ease;
+    color: #1E293B;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+    
+}
+.form-control1 {
+    width: 100%;
+    padding: 0.875rem 1rem;
+    font-size: 0.95rem;
+    border: 2px solid #E2E8F0;
+    border-radius: 12px;
+    background: #FFFFFF;
+    transition: all 0.3s ease;
+    color: #1E293B;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+    width: 50px;
+    
+}
+.form-control1:hover {
+    border-color: #000000;
+    box-shadow: 0 4px 8px rgba(74, 108, 247, 0.1);
+    
+}
+
+.form-control1:focus {
+    outline: none;
+    border-color: #000000;
+    box-shadow: 0 0 0 4px rgba(74, 108, 247, 0.15);
+    
+}
+
+.form-control:hover {
+    border-color: #000000;
+    box-shadow: 0 4px 8px rgba(74, 108, 247, 0.1);
+    
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: #000000;
+    box-shadow: 0 0 0 4px rgba(74, 108, 247, 0.15);
+    
+}
+/* Select personalizado */
+select.form-control {
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg width='14' height='8' viewBox='0 0 14 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L7 7L13 1' stroke='%234A6CF7' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    padding-right: 2.5rem;
+}
+
+/* Campo readonly */
+.form-control[readonly] {
+    background-color: #F8FAFC;
+    border-style: dashed;
+    cursor: not-allowed;
+}
+
+/* Textarea */
+textarea.form-control {
+    resize: vertical;
+    min-height: 100px;
+    font-family: 'Poppins', sans-serif;
+}
+
+.file-upload {
+    padding: 2rem;
+    text-align: center;
+    background: rgba(74, 108, 247, 0.03);
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+
+
+/* Botón */
+.button {
+    background-color: #000000;  /* Fondo negro */
+    color: white;
+    padding: 0.875rem 3rem;
+    border: none;
+    border-radius: 12px;
+    font-weight: 500;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.4s ease;
+    box-shadow: 0 4px 12px rgba(74, 108, 247, 0.2);
+}
+
+.button:hover {
+    transform: translateY(-4px);  
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);  
+    background-color: #444444;  
+}
+
+.button:active {
+    transform: translateY(0);
+}
+
+/* Footer */
+.form-footer {
+    display: flex;
+    justify-content: center;
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 2px solid #E2E8F0;
+
+}
+
+/* Animaciones */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.container {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    body {
+        padding: 1rem;
+    }
+
+    .container {
+        padding: 1.5rem;
+    }
+
+    .form-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .title {
+        font-size: 1.5rem;
+    }
+}
+
+/* Estilos para estados de validación */
+.form-control.is-valid {
+    border-color: #08D1BC;
+    background-image: url("data:image/svg+xml,%3Csvg width='16' height='16' viewBox='0 0 16 16' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M13.3334 4L6.00002 11.3333L2.66669 8' stroke='%2308D1BC' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    padding-right: 2.5rem;
+}
+
+.form-control.is-invalid {
+    border-color: #FF6B6B;
+    background-image: url("data:image/svg+xml,%3Csvg width='16' height='16' viewBox='0 0 16 16' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M8 5.33333V8M8 10.6667H8.00667M14 8C14 11.3137 11.3137 14 8 14C4.68629 14 2 11.3137 2 8C2 4.68629 4.68629 2 8 2C11.3137 2 14 4.68629 14 8Z' stroke='%23FF6B6B' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    padding-right: 2.5rem;
+}
+img {
+    max-width: 60%;
+    height: auto;
+    border-radius: 8px;
+    align-items: center;
+}
+.logo-container {
+    text-align: center; 
+    margin-top: 20px; 
+}
+.custom-popup {
+    background-color: #f5f5f5; /* Color de fondo del modal */
+    border-radius: 10px; /* Bordes redondeados */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Sombra suave */
+}
+.upload-area {
+    margin-bottom: 1rem;
+}
+ 
+.file-upload-wrapper {
+    position: relative;
+    border: 2px dashed #ccc;
+    border-radius: 4px;
+    padding: 1rem;
+    text-align: center;
+    transition: border-color 0.3s ease;
+}
+ 
+.file-upload-wrapper:hover {
+    border-color: #000000;
+}
+ 
+.file-upload-wrapper input[type="file"] {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+}
+ 
+.file-upload-message {
+    color: #000000;
+}
+ 
+.file-upload-message i {
+    font-size: 1.5rem;
+    margin-right: 0.5rem;
+}
+ 
+#fileSelected {
+    color: #28a745;
+}
