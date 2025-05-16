@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carga de Facturas</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    <style>
+        .upload-area {
+            border: 2px dashed #ccc;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            margin: 20px 0;
+            cursor: pointer;
+        }
+        
+        .upload-area:hover {
+            border-color: #0d6efd;
+        }
+        
+        .file-info {
+            margin-top: 10px;
+            display: none;
+        }
+        
+        .progress {
+            margin-top: 20px;
+            display: none;
+        }
+        
+        .results {
+            margin-top: 20px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-4">
+        <h1 class="mb-4">Carga de Facturas</h1>
+        
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title">Cargar Archivo Excel</h5>
+            </div>
+            <div class="card-body">
+                <form id="uploadForm" enctype="multipart/form-data">
+                    <div class="upload-area" id="dropZone">
+                        <p>Arrastra y suelta tu archivo Excel aquí o</p>
+                        <input type="file" id="fileInput" class="form-control" accept=".xlsx, .xls" style="display: none;">
+                        <button type="button" class="btn btn-primary" id="browseButton">Seleccionar archivo</button>
+                    </div>
+                    
+                    <div class="file-info" id="fileInfo">
+                        <div class="alert alert-info">
+                            <strong>Archivo seleccionado:</strong> <span id="fileName"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-check mt-3">
+                        <input class="form-check-input" type="checkbox" id="permitirDuplicados">
+                        <label class="form-check-label" for="permitirDuplicados">
+                            Permitir duplicados (marcar esta opción para cargar facturas con códigos duplicados)
+                        </label>
+                    </div>
+                    
+                    <div class="mt-3">
+                        <button type="submit" class="btn btn-success" id="uploadButton" disabled>Cargar facturas</button>
+                        <button type="button" class="btn btn-secondary" id="cancelButton">Cancelar</button>
+                    </div>
+                </form>
+                
+                <div class="progress" id="progressContainer">
+                    <div class="progress-bar" role="progressbar" id="progressBar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
+                </div>
+                
+                <div class="results" id="results">
+                    <div class="alert" id="resultAlert">
+                        <h5 id="resultTitle"></h5>
+                        <p id="resultMessage"></p>
+                        <div id="resultDetails" style="display: none;">
+                            <hr>
+                            <h6>Detalles:</h6>
+                            <ul id="resultDetailsList"></ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const dropZone = document.getElementById('dropZone');
+            const fileInput = document.getElementById('fileInput');
+            const browseButton = document.getElementById('browseButton');
+            const uploadButton = document.getElementById('uploadButton');
+            const cancelButton = document.getElementById('cancelButton');
+            const fileInfo = document.getElementById('fileInfo');
+            const fileName = document.getElementById('fileName');
+            const progressContainer = document.getElementById('progressContainer');
+            const progressBar = document.getElementById('progressBar');
+            const results = document.getElementById('results');
+            const resultAlert = document.getElementById('resultAlert');
+            const resultTitle = document.getElementById('resultTitle');
+            const resultMessage = document.getElementById('resultMessage');
+            const resultDetails = document.getElementById('resultDetails');
+            const resultDetailsList = document.getElementById('resultDetailsList');
+            const permitirDuplicados = document.getElementById('permitirDuplicados');
+            
+            // Eventos de drag and drop
+            dropZone.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                dropZone.style.borderColor = '#0d6efd';
+            });
+            
+            dropZone.addEventListener('dragleave', function(e) {
+                e.preventDefault();
+                dropZone.style.borderColor = '#ccc';
+            });
+            
+            dropZone.addEventListener('drop', function(e) {
+                e.preventDefault();
+                dropZone.style.borderColor = '#ccc';
+                
+                const files = e.dataTransfer.files;
+                if (files.length > 0) {
+                    fileInput.files = files;
+                    handleFileSelection();
+                }
+            });
+            
+            // Evento de selección de archivo
+            browseButton.addEventListener('click', function() {
+                fileInput.click();
+            });
+            
+            fileInput.addEventListener('change', handleFileSelection);
+            
+            function handleFileSelection() {
+                if (fileInput.files.length > 0) {
+                    const file = fileInput.files[0];
+                    if (file.name.endsWith('.xlsx') || file.name.endsWith('.xls')) {
+                        fileName.textContent = file.name;
+                        fileInfo.style.display = 'block';
+                        uploadButton.disabled = false;
+                    } else {
+                        alert('El archivo debe ser un Excel (.xlsx o .xls)');
+                        fileInput.value = '';
+                    }
+                }
+            }
+            
+            // Evento de cancelar
+            cancelButton.addEventListener('click', function() {
+                fileInput.value = '';
+                fileInfo.style.display = 'none';
+                progressContainer.style.display = 'none';
+                results.style.display = 'none';
+                uploadButton.disabled = true;
+            });
+            
+            // Evento de subir
+            document.getElementById('uploadForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                if (!fileInput.files.length) {
+                    return;
+                }
+                
+                // Mostrar progreso
+                progressContainer.style.display = 'block';
+                results.style.display = 'none';
+                
+                const formData = new FormData();
+                formData.append('file', fileInput.files[0]);
+                formData.append('permitir_duplicados', permitirDuplicados.checked);
+                
+                // Simular progreso (en un caso real, usaríamos XMLHttpRequest.upload.onprogress)
+                let progress = 0;
+                const progressInterval = setInterval(function() {
+                    progress += 5;
+                    if (progress <= 90) {
+                        progressBar.style.width = progress + '%';
+                        progressBar.textContent = progress + '%';
+                        progressBar.setAttribute('aria-valuenow', progress);
+                    }
+                }, 100);
+                
+                // Realizar petición AJAX
+                fetch('/api/facturas/upload', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    clearInterval(progressInterval);
+                    progressBar.style.width = '100%';
+                    progressBar.textContent = '100%';
+                    progressBar.setAttribute('aria-valuenow', 100);
+                    
+                    // Mostrar resultados
+                    showResults(data);
+                })
+                .catch(error => {
+                    clearInterval(progressInterval);
+                    console.error('Error:', error);
+                    
+                    // Mostrar error
+                    resultAlert.className = 'alert alert-danger';
+                    resultTitle.textContent = 'Error';
+                    resultMessage.textContent = 'Ocurrió un error al procesar el archivo. Por favor, inténtalo de nuevo.';
+                    resultDetails.style.display = 'none';
+                    results.style.display = 'block';
+                });
+            });
+            
+            function showResults(data) {
+                results.style.display = 'block';
+                
+                if (data.success) {
+                    if (data.warning) {
+                        resultAlert.className = 'alert alert-warning';
+                        resultTitle.textContent = '¡Completado con advertencias!';
+                        resultMessage.textContent = `Se procesaron ${data.facturas_procesadas} facturas con ${data.facturas_con_error} errores.`;
+                        
+                        // Mostrar detalles de errores
+                        resultDetailsList.innerHTML = '';
+                        if (data.details && data.details.length > 0) {
+                            data.details.forEach(function(detail) {
+                                const li = document.createElement('li');
+                                li.textContent = detail;
+                                resultDetailsList.appendChild(li);
+                            });
+                            resultDetails.style.display = 'block';
+                        } else {
+                            resultDetails.style.display = 'none';
+                        }
+                    } else {
+                        resultAlert.className = 'alert alert-success';
+                        resultTitle.textContent = '¡Éxito!';
+                        resultMessage.textContent = data.message;
+                        resultDetails.style.display = 'none';
+                    }
+                } else {
+                    resultAlert.className = 'alert alert-danger';
+                    resultTitle.textContent = 'Error';
+                    resultMessage.textContent = data.error;
+                    
+                    // Mostrar detalles de errores
+                    resultDetailsList.innerHTML = '';
+                    if (data.details && data.details.length > 0) {
+                        data.details.forEach(function(detail) {
+                            const li = document.createElement('li');
+                            li.textContent = detail;
+                            resultDetailsList.appendChild(li);
+                        });
+                        resultDetails.style.display = 'block';
+                    } else {
+                        resultDetails.style.display = 'none';
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
